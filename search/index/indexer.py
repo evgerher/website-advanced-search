@@ -3,6 +3,7 @@ from typing import TextIO, List
 import json
 import pickle
 import re
+import string
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -13,7 +14,8 @@ import numpy as np
 
 logger = logging.getLogger('cli')
 
-pattern = re.compile(r'[0-9][^ ]*')
+PATTERN = re.compile(r'[0-9][^ ]*')
+PUNCTUATION_TABLE = str.maketrans('', '', string.punctuation)
 
 LEMMA = str
 
@@ -42,10 +44,11 @@ class Index:
 
 
 def transform_text(nlp, text: str) -> List[LEMMA]:
-  text = text.lower().replace("\n", " ").replace("'", "").replace("’", "")
-  text = re.sub(pattern, ' ', text)
+  text = text.lower().replace("\n", " ").replace("’", "")
+  text = text.translate(PUNCTUATION_TABLE)
+  text = re.sub(PATTERN, ' ', text)
   tokens = nlp(text)
-  return [token.lemma_ for token in tokens if not (token.is_stop or token.is_punct or token.is_digit or '0' <= token.text[0] <= '9')]
+  return [token.lemma_ for token in tokens if token.is_alpha and not (token.is_stop or token.is_punct or token.is_digit or '0' <= token.text[0] <= '9')]
 
 
 def build_index(input_file: TextIO, index_output_filepath: str):

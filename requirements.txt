@@ -4,3 +4,5 @@ scrapy
 spacy==2.3.5
 scikit-learn==0.23.2
 numpy==1.19.2
+transformers==4.1.1
+torch==1.7.1
