@@ -1,1 +1,9 @@
 .idea/
+*/__pycache__/
+*__pycache__/
+*.log
+*.jsonl
+*.xml
+*.npz
+*.txt
+*.pkl
