@@ -17,7 +17,7 @@ import yaml
   #   logging.basicConfig(level=default_level)
   #   print('Failed to load configuration file. Using default configs')
 
-def setup_logger(name, default_path='logging.yaml', default_level=logging.INFO):
+def setup_logger(default_path='logging.yaml', default_level=logging.INFO):
   formatter = logging.Formatter(
     fmt="%(asctime)s %(levelname)s: %(message)s",
     datefmt='%Y-%m-%d %H:%M:%S'
@@ -29,6 +29,9 @@ def setup_logger(name, default_path='logging.yaml', default_level=logging.INFO):
   all_file_handler.setLevel(logging.DEBUG)
   all_file_handler.setFormatter(formatter)
 
-  logger = logging.getLogger(name)
+  logger = logging.getLogger('cli')
   logger.setLevel(logging.DEBUG)
   logger.addHandler(all_file_handler)
+
+  # logging.basicConfig(level=default_level)
+  # print('Failed to load configuration file. Using default configs')

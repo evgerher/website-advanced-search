@@ -1,20 +1,25 @@
 import logging
-from typing import TextIO, IO, List
+from typing import TextIO, List
 import json
+import pickle
+import re
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import scipy.sparse
-import pickle
-
 import spacy
+import numpy as np
 
-logger = logging.getLogger('indexer')
+
+logger = logging.getLogger('cli')
+
+pattern = re.compile(r'[0-9][^ ]*')
 
 LEMMA = str
 
 class Index:
   def __init__(self, index_filepath: str):
-    self._nlp = spacy.load('en_core_web_sm')
+    self._nlp = spacy.load('en_core_web_md')
 
     matrix_path = index_filepath + '.npz'
     vectorizer_path = index_filepath + '-vectorizer.pkl'
@@ -29,19 +34,22 @@ class Index:
     logger.info('Received query: <%s>', query)
     lemmas = transform_text(self._nlp, query)
     lemma_text = ' '.join([lemma for lemma in lemmas if lemma in self._word_set])
-    vector = self._vectorizer.transform(lemma_text)
-    similarities = cosine_similarity(self._corpus_matrix, vector)
-    return similarities
+    vector = self._vectorizer.transform([lemma_text])
+    similarities = cosine_similarity(vector, self._corpus_matrix)
+    indexes = np.argsort(-similarities, )
+    scores = similarities[0, indexes]
+    return indexes, scores
 
 
 def transform_text(nlp, text: str) -> List[LEMMA]:
-  text = text.replace("\n", " ").replace("'", "").replace("’", "")
+  text = text.lower().replace("\n", " ").replace("'", "").replace("’", "")
+  text = re.sub(pattern, ' ', text)
   tokens = nlp(text)
-  return [token.lemma_ for token in tokens if not (token.is_stop or token.is_punct or token.is_space)]
+  return [token.lemma_ for token in tokens if not (token.is_stop or token.is_punct or token.is_digit or '0' <= token.text[0] <= '9')]
 
 
 def build_index(input_file: TextIO, index_output_filepath: str):
-  nlp = spacy.load('en_core_web_sm')
+  nlp = spacy.load('en_core_web_md')
   logger.info('Loaded spacy engine.')
 
   corpus = []
@@ -72,5 +80,5 @@ def build_index(input_file: TextIO, index_output_filepath: str):
   words_path = index_output_filepath + '-words.txt'
   with open(words_path, 'w') as f:
     for word in present_words:
-      f.write('{}\n' % word)
+      f.write(f'{word}\n')
   logger.info('Stored words at %s.', words_path)

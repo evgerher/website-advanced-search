@@ -5,7 +5,7 @@ from search.index import html_parser as hp
 from search.index import indexer as ix
 from search.logger import setup_logger
 
-logger = logging.getLogger('<indexer>')
+logger = logging.getLogger('cli')
 
 
 def html_parser_callback(args):
@@ -16,8 +16,6 @@ def html_parser_callback(args):
 def build_index_callback(args):
   logger.info('Received args: %s', args)
   ix.build_index(args.input_file, args.output_filepath)
-
-
 
 
 def parse_arguments():
@@ -54,14 +52,14 @@ def parse_arguments():
                              required=False,
                              dest='output_filepath',
                              default='website.index',
-                             metavar='/path/to/website.index',
-                             help='Constructed index filepath')
+                             metavar='/path/to/index',
+                             help='Path for a number of generated files (-matrix.npz, -words.txt, ...)')
   index_builder.set_defaults(callback=build_index_callback)
 
   return main_argparser.parse_args()
 
 
 if __name__ == '__main__':
-  setup_logger(__name__)
+  setup_logger('cli')
   arguments = parse_arguments()
   arguments.callback(arguments)

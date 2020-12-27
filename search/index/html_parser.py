@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 URL = TITLE = CONTENT = str
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('cli')
 
 
 class BaseRule(ABC):

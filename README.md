@@ -3,11 +3,20 @@
 This project represents the idea of typical QA system nowadays. It combines the idea of retrieval models and latest QA solutions.  
 It builds website-specific index to search on top of and provides precise answers for the end-user.  
 
+
 ## Use case
 
 1. Allow user to search for information on a website via native language.  
 2. The user expects precise answer on his question.  
 3. The system must suggest a link to the page the information was found on.  
+
+## Instructions
+
+1. Install `requirements.txt` 
+2. Download `en-core-web-md` SpaCy dataset via `python -m spacy download en_core_web_md`
+3. ...  
+
+---
 
 ## Future work
 
