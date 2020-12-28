@@ -1,0 +1,23 @@
+p.system {
+    padding-left: 15px;
+    text-underline-color: red;
+    text-decoration: underline;
+}
+
+li.system {
+    padding-left: 20px;
+    text-underline-color: red;
+    text-decoration: underline;
+    padding-top: 5px;
+}
+
+p.user {
+    padding-left: 5px;
+    text-underline-color: green;
+    text-decoration: underline;
+}
+
+#input-text {
+    margin: 20px;
+    margin-left: 100px;
+}
