@@ -40,7 +40,7 @@ class Index:
     similarities = cosine_similarity(vector, self._corpus_matrix)
     indexes = np.argsort(-similarities, )
     scores = similarities[0, indexes]
-    return indexes, scores
+    return indexes[0], scores[0]
 
 
 def transform_text(nlp, text: str) -> List[LEMMA]:
