@@ -20,8 +20,8 @@ app.config['SECRET_KEY'] = '!SUPER_SECRET!'
 CORS(app)
 
 qa = SimpleQA()
-index = Index('website-index')
-idx_website, url_website = load_website('parsed.jsonl')
+index = Index('example/website-index')
+idx_website, url_website = load_website('example/parsed.jsonl')
 
 TOP_N = 3
 
@@ -62,4 +62,4 @@ def handle_user_phase2():
 
 if __name__ == '__main__':
   setup_logger('cli')
-  app.run(host='0.0.0.0', port=5000)
+  app.run(host='0.0.0.0', port=5001)

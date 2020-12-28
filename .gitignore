@@ -7,3 +7,5 @@
 *.npz
 *.txt
 *.pkl
+.DS_Store
+*.egg-info/

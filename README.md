@@ -4,17 +4,37 @@ This project represents the idea of typical QA system nowadays. It combines the 
 It builds website-specific index to search on top of and provides precise answers for the end-user.  
 
 
+## Demo
+
+##### To be uploaded next morning
+
+---
+
 ## Use case
 
 1. Allow user to search for information on a website via native language.  
 2. The user expects precise answer on his question.  
 3. The system must suggest a link to the page the information was found on.  
 
-## Instructions
+## Instructions to run example
 
 1. Install `requirements.txt` 
-2. Download `en-core-web-md` SpaCy dataset via `python -m spacy download en_core_web_md`
-3. ...  
+2. Download `en-core-web-md` SpaCy dataset via `python -m spacy download en_core_web_md`  
+3. Install package locally `pip install -e .`  
+4. Start server `FLASK_APP=server flask run`  
+5. Install google chrome extension from local files  
+    1. Open google chrome.
+    2. Go to `Settings -> Extensions`
+    3. Enable `Developer mode`  
+    4. Click `Load unpacked` and select folder `client`  
+6. Open new tab and click on the extension, write queries about cooking.  
+    1. Queries w/o `?` mark in the end will be treated as a search for matching recipe (Ctrl-click one of them).  
+    2. Query with `?` mark in the end are Question-Answer request and the answer will appear in the same block.  
+
+## Instructions to build
+
+1. Apply steps 1-3 from previous instructions
+2. ... 
 
 ---
 
