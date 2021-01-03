@@ -1,43 +1,19 @@
-// document.addEventListener('DOMContentLoaded', function() {
-//   var checkPageButton = document.getElementById('checkPage');
-//   checkPageButton.addEventListener('click', function() {
-//
-//     chrome.tabs.getSelected(null, function(tab) {
-//       d = document;
-//
-//       var f = d.createElement('form');
-//       f.action = 'http://127.0.0.1:5000/connected';
-//       f.method = 'post';
-//       var i = d.createElement('input');
-//       i.type = 'hidden';
-//       i.name = 'url';
-//       i.value = tab.url;
-//       f.appendChild(i);
-//       d.body.appendChild(f);
-//       f.submit();
-//     });
-//   }, false);
-// }, false);
-
-$(document).ready(($) => {
-
-
+function post_msg(url, data, func_sucess) {
   $.ajax({
     type: "POST",
-    url: "http://localhost:5000/connected",
-    data: JSON.stringify({Name: "Dmitry"}),
+    url: url,
+    data: JSON.stringify(data),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
-    success: (data) => {
-      console.log(data);
-    },
+    success: func_sucess,
     failure: (errMsg) => {
-        console.log(errMsg);
+        console.error(errMsg);
     }
   });
+}
 
-
-  var state = 0;
+$(document).ready(($) => {
+  post_msg("http://localhost:5000/connected", JSON.stringify({Name: "Dmitry"}), () => {})
 
   $('#submit').on('click', () => {
     chrome.tabs.getSelected(null, function(tab) {
@@ -49,14 +25,8 @@ $(document).ready(($) => {
       $msgs.append($p);
 
       if (data[data.length - 1] != '?') {
-        $.ajax({
-          type: "POST",
-          url: "http://localhost:5000/phase1",
-          data: JSON.stringify({question: data}),
-          dataType: "json",
-          contentType: "application/json; charset=utf-8",
-          success: (data) => {
-            console.log(data);
+        post_msg("http://localhost:5000/phase1", {question: data}, (data) => {
+            console.log(`Received: ${data}`);
             $p = `<p class="system">System: I would like to suggest you next recipes:</p>`;
             $msgs.append($p);
             $msgs.append('<ul>');
@@ -66,24 +36,13 @@ $(document).ready(($) => {
               $msgs.append($li);
             }
             $msgs.append('</ul>');
-            state = 1;
-          }
         });
       } else {
-        $.ajax({
-          type: "POST",
-          url: "http://localhost:5000/phase2",
-          data: JSON.stringify({question: data, url: url}),
-          dataType: "json",
-          contentType: "application/json; charset=utf-8",
-          success: (data) => {
-            console.log(data);
+        post_msg("http://localhost:5000/phase2", {question: data, url: url}, (data) => {
+            console.log(`Received: ${data}`);
             $p = `<p class="system">System: The answer is "${data.answer}".</p>`;
             $msgs.append($p);
-            // add here fields
-            state = 1;
-          }
-        });
+          });
       }
 
       $('#input-text').val('');

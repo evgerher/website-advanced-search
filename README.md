@@ -6,7 +6,7 @@ It builds website-specific index to search on top of and provides precise answer
 
 ## Demo
 
-##### To be uploaded next morning
+![Application demonstration](.github/demo.gif)
 
 ---
 
